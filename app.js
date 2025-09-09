@@ -25,12 +25,14 @@ app.use(errorhandling);
 
 // Default data
 
+console.log("Initialisation des données par défaut..");
 defaultController.defaultCanals().then(() => {
 defaultController.defaultTypeActeur().then(() => {
 defaultController.defaultOperations().then(() => {
 defaultController.defaultTypeDocument().then(() => {
 defaultController.defaultProfil().then(() => {
 defaultController.defaultAdmin().then(() => {
+    console.log("Initialisation terminée");
 });});});});});});
 
 module.exports = app; 

@@ -16,7 +16,7 @@ const defaultCanals = async () => {
      * [x] Vérifier un par un que les canaux (applications satélites) par défauts listés existent dans la base de données
      * [x] Si oui: ne rien faire ; Sinon: Créer le canal par défaut inexistant
      */
-    console.log(`Vérification des canaux par défaut..`);
+    console.log(`Vérification des canaux`);
 
     const canauxList = defaultType.canal;
 
@@ -58,7 +58,7 @@ const defaultTypeActeur = async () => {
      * [x] Vérifier un par un que les type acteur par défauts listés existent dans la base de données
      * [x] Si oui: ne rien faire ; Sinon: Créer les type acteur par défaut inexistant
      */
-    console.log(`Vérification des type-acteur par défaut..`)
+    console.log(`Vérification des types acteur`)
 
     const typeActeursList = defaultType.type_acteur;
 
@@ -89,7 +89,7 @@ const defaultOperations = async () => {
      * [x] Vérifier un par un que les opérations par défauts listés existent dans la base de données
      * [x] Si oui: ne rien faire ; Sinon: Créer l'opération par défaut inexistant
      */
-    console.log(`Vérification des type-opérations par défaut..`);
+    console.log(`Vérification des types opérations`);
 
     const typeOperationsList = defaultType.type_operation;
 
@@ -121,7 +121,7 @@ const defaultTypeDocument = async () => {
      * [x] Vérifier un par un que les types document par défauts listés existent dans la base de données
      * [x] Si oui: ne rien faire ; Sinon: Créer le type document par défaut inexistant
      */
-    console.log(`Vérification des types document par défaut..`);
+    console.log(`Vérification des types document`);
 
     const typeDocumentList = defaultType.type_document
 
@@ -153,7 +153,7 @@ const defaultProfil = async () => {
      * [x] Vérifier un par un que les type acteur par défauts listés existent dans la base de données
      * [x] Si oui: ne rien faire ; Sinon: Créer les type acteur par défaut inexistant
      */
-    console.log(`Vérification des profils par défaut..`)
+    console.log(`Vérification des profils`)
 
     const profilList = defaultType.profil;
 
@@ -188,7 +188,7 @@ const defaultAdmin = async () => {
      *  __ mdp: admin
      * [x] En passant, créer un profil Administrateur
      */
-    console.log(`Vérification du compte admin par défaut..`)
+    console.log(`Vérification du compte admin`)
 
     await Agent.findAll().then(async results => {
         if (results.length==0) {
