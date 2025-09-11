@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express'); 
 const cors = require('cors'); 
 
+const swaggerUI = require('swagger-ui-express');
+const swaggerDocument = require('./swagger-outpout.json');
 const bodyParser = require('body-parser'); 
 const defaultController = require('./src/controllers/default_controller'); 
 const authRoutes = require('./src/routes/auth_routes'); 
@@ -18,6 +20,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 const base_path = '/v1'
 
 app.use(`${base_path}/auth`, authRoutes);
+app.use(base_path + '/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 // Error handling middlware 
 
