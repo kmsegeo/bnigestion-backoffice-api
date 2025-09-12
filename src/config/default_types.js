@@ -27,7 +27,7 @@ const type_operation = [
     {'intitule': 'onbording','description': 'Opération liées à la création de compte utilisateur','transaction': false}, 
     {'intitule': 'connexion','description': 'Opération liées à la gestion de session','transaction': false}, 
     {'intitule': 'administration','description': 'Opération liées à l\'administration','transaction': false}, 
-    {'intitule': 'recharge','description': 'Opération pour approvisionner le compte du client','transaction': true},
+    {'intitule': 'depot','description': 'Opération pour approvisionner le compte du client','transaction': true},
     {'intitule': 'souscription','description': 'Opération pour toute action de souscription','transaction': true}, 
     {'intitule': 'rachat','description': 'Opération pour toute action de rachat','transaction': true}, 
     {'intitule': 'transfert','description': 'Opération pour effectuer un cashout','transaction': true},
