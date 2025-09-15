@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 const TypeDocument = {
 
-    tableName: `t_type_document`,
+    tableName: `_sc_gestion.t_type_document`,
     code_colunm: `r_code`,
     code_prefix: `TYDC`,
 

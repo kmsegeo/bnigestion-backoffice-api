@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 const TypeOperation = {
 
-    tableName: `t_type_operation`,
+    tableName: `_sc_gestion.t_type_operation`,
     code_colunm: `r_code`,
     code_prefix: `TYOP`,
 

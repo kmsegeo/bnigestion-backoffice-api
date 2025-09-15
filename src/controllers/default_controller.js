@@ -199,7 +199,7 @@ const defaultAdmin = async () => {
                     r_nom_complet: `BNI` + ' ' + `Admin`,
                     r_email: `admin@bnigestion.net`,
                     r_telephone: `2250000000000`,
-                    r_adresse: "Abidjan - Cocody",
+                    r_adresse: `Abidjan - Cocody`,
                     r_mdp : hash,
                     type_acteur: 'TYAC001'
                 }).then(async acteur => {
@@ -211,7 +211,8 @@ const defaultAdmin = async () => {
                         e_acteur : acteur.r_i
                     }).then(async admin => {
                         console.log("Création de l'agent/administrateur par défaut terminé.");
-                        console.log("pwd:", "admin");
+                        console.log("login:", "admin", "pwd:", "admin");
+                        console.log(admin)
                     }).catch(error => console.log(error.stack));
                 }).catch(error => console.log(error.stack));
             }).catch(error => console.log(error.stack));

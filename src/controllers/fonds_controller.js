@@ -1,4 +1,3 @@
-const e = require("express");
 const response = require("../middlewares/response");
 const Fonds = require("../models/Fonds");
 const ValeurLiquidative = require("../models/ValeurLiquidative");
@@ -9,12 +8,9 @@ const getAllFonds = async (req, res, next) => {
     await Fonds.findAll().then(async fonds => {
         for (let f of fonds) {
             await ValeurLiquidative.findLastByFonds(f.r_i).then(vl => {
-                f['valeur_liquidative'] = vl;
+                f['vl'] = vl;
             }).catch(err=>next(err));
         }
-        await ValeurLiquidative.findLastByFonds(fonds.r_i).then(vl => {
-            fonds.valeur_liquidative = vl ? vl.r_valeur : null;
-        });
         return response(res, 200, "Liste des fonds", fonds);
     }).catch(err => next(err));
 }

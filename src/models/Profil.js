@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 const Profil = {
 
-  tableName: 't_profil',
+  tableName: '_sc_auth.t_profil',
   codePrefix: 'PRFA',
   codeColumn: 'r_code',
 

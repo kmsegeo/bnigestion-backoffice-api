@@ -1,8 +1,9 @@
 const db = require('../config/database');
+const Profil = require('./Profil');
 
 const Agent = {  
 
-  tableName: 't_agent',
+  tableName: '_sc_auth.t_agent',
 
   async findAll() {
     // const queryString = `
@@ -17,7 +18,7 @@ const Agent = {
 
   async create({r_civilite, r_nom, r_prenom, profil_code, e_acteur}) {
     const queryString = `INSERT INTO ${this.tableName} (r_civilite, r_nom, r_prenom, e_profil, e_acteur)
-      VALUES($1, $2, $3, (SELECT r_i FROM t_profil WHERE r_code=$4), $5) RETURNING *`;
+      VALUES($1, $2, $3, (SELECT r_i FROM ${Profil.tableName} WHERE r_code=$4), $5) RETURNING *`;
     const res = db.query(queryString, [r_civilite, r_nom, r_prenom, profil_code, e_acteur]);
     return (await res).rows[0];
   },

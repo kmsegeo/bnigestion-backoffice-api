@@ -1,8 +1,9 @@
 const db = require('../config/database');
+const TypeActeur = require('./TypeActeur')
 
 const Acteur = {  
 
-  tableName: 't_acteur',
+  tableName: '_sc_auth.t_acteur',
 
   async createAgent({r_nom_complet, r_email, r_telephone, r_adresse, r_mdp, type_acteur}) {
     
@@ -21,7 +22,7 @@ const Acteur = {
         r_date_activation,
         r_mdp,
         e_type_acteur) 
-      VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,(SELECT r_i FROM t_type_acteur WHERE r_code=$11)) 
+      VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,(SELECT r_i FROM ${TypeActeur.tableName} WHERE r_code=$11)) 
       RETURNING r_i,
         r_nom_complet, 
         r_email, 
