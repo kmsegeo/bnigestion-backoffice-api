@@ -20,8 +20,8 @@ const getOneFonds = async (req, res, next) => {
     console.log("Récupération du fonds " + code + "...");
     await Fonds.findByCode(code).then(async fonds => {
         if (!fonds) return response(res, 404, "Fonds non trouvé", null)
-        await ValeurLiquidative.findAllByFonds(fonds.r_i).then(vls => {
-            fonds.vls = vls
+        await ValeurLiquidative.findLastByFonds(fonds.r_i).then(vl => {
+            fonds.vl = vl
             return response(res, 200, "Détails du fonds", fonds);
         }).catch(err => next(err));
     }).catch(err => next(err));
@@ -41,9 +41,10 @@ const createFonds = async (req, res, next) => {
 
 const createVl = async (req, res, next) => {
     console.log("Création d'une nouvelle VL...");
-    const {fonds_code, valeur, datevl, description} = req.body;
-    Utils.expectedParameters({fonds_code, valeur, datevl}).then(async () => {
-        await Fonds.findByCode(fonds_code).then(async fonds => {
+    const code = req.params.code;
+    const {valeur, datevl, description} = req.body;
+    Utils.expectedParameters({code, valeur, datevl}).then(async () => {
+        await Fonds.findByCode(code).then(async fonds => {
             if (!fonds) return response(res, 404, "Fonds non trouvé");
             await ValeurLiquidative.findLastByFonds(fonds.r_i).then(async oldvl => {
                 console.log( "valeur_precedente:", oldvl?.r_valeur, "date_precedente:", oldvl?.r_datevl)
@@ -67,11 +68,12 @@ const getLastByFonds = async (req, res, next) => {
 
 const getAllVlsByFonds = async (req, res, next) => {
     const code = req.params.code;
-    console.log("Récupération des VL du fonds " + code + "...");
+    console.log("Récupération du fonds " + code + "...");
     await Fonds.findByCode(code).then(async fonds => {
-        if (!fonds) return response(res, 404, "Fonds non trouvé");
+        if (!fonds) return response(res, 404, "Fonds non trouvé", null)
         await ValeurLiquidative.findAllByFonds(fonds.r_i).then(vls => {
-            return response(res, 200, "Liste des valeurs liquidatives du fonds " + code, vls);
+            fonds.vls = vls
+            return response(res, 200, "Détails du fonds", fonds);
         }).catch(err => next(err));
     }).catch(err => next(err));
 }
