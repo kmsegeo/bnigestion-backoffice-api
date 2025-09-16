@@ -8,7 +8,9 @@ const swaggerDocument = require('./swagger-outpout.json');
 const bodyParser = require('body-parser'); 
 const defaultController = require('./src/controllers/default_controller'); 
 const authRoutes = require('./src/routes/auth_routes'); 
+const clientRoutes = require('./src/routes/client_routes');
 const fondsRoutes = require('./src/routes/fonds_routes');
+const operationRoutes = require('./src/routes/operation_routes');
 
 const app = express(); 
 
@@ -24,6 +26,9 @@ app.use(base_path + '/auth', authRoutes);
 app.use(base_path + '/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(base_path + '/fonds', fondsRoutes);
+
+app.use(base_path + '/acteurs/clients', clientRoutes);
+app.use(base_path + '/acteurs/operations', operationRoutes);
 
 // Error handling middlware 
 

@@ -212,7 +212,6 @@ const defaultAdmin = async () => {
                     }).then(async admin => {
                         console.log("Création de l'agent/administrateur par défaut terminé.");
                         console.log("login:", "admin", "pwd:", "admin");
-                        console.log(admin)
                     }).catch(error => console.log(error.stack));
                 }).catch(error => console.log(error.stack));
             }).catch(error => console.log(error.stack));
