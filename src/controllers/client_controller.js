@@ -19,7 +19,7 @@ const validerCompteParticulier = async (req, res, next) => {
     const particulierId = req.params.particulierId;
     await Particulier.findById(particulierId).then(async client => {
         if(!client) return response(res, 404, `Client introuvable !`);
-        if (client.r_ncompte_titre!=null) return response(res, 409, `Le compte du client est déjà validé !`);
+        if (client.r_ncompte_titre) return response(res, 409, `Le compte du client est déjà validé !`);
         console.log(`Creation du compte de dépôt`);
         const min = 100000000; const max = 999999999; 
         const ncompte = Math.floor(Math.random() * (max - min + 1)) + min;
