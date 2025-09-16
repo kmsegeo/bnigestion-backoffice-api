@@ -26,7 +26,7 @@ const ValeurLiquidative = {
         const now = new Date();
         const res = db.query(`
             INSERT INTO ${this.tableName} (
-                r_valeur,
+                r_valeur_courante,
                 r_datevl,
                 r_description,
                 r_valeur_precedente,
@@ -56,19 +56,19 @@ const ValeurLiquidative = {
     },
 
     async findLastByFonds(fonds) {
-        const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_fonds=$1 AND r_statut=$2 ORDER BY r_datevl DESC LIMIT 1`, [fonds, 1]);
+        const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_fonds=$1 AND r_statut=$2 ORDER BY r_i DESC LIMIT 1`, [fonds, 1]);
         return (await res).rows[0];
     },
 
     async findAllByFonds(fonds) {
-        const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_fonds=$1 AND r_statut=$2 ORDER BY r_datevl DESC`, [fonds, 1]);
+        const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_fonds=$1 AND r_statut=$2 ORDER BY r_i DESC`, [fonds, 1]);
         return (await res).rows;
     },
     
     async update(id, fonds, {valeur, datevl, description, valeur_precedente, date_precedente}) {
         const res = db.query(`
             UPDATE ${this.tableName} 
-            SET r_valeur=$1,
+            SET r_valeur_courante=$1,
                 r_datevl=$2,
                 r_description=$3,
                 r_valeur_precedente=$4

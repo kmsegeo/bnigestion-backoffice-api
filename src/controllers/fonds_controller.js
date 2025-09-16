@@ -47,8 +47,8 @@ const createVl = async (req, res, next) => {
         await Fonds.findByCode(code).then(async fonds => {
             if (!fonds) return response(res, 404, "Fonds non trouvé");
             await ValeurLiquidative.findLastByFonds(fonds.r_i).then(async oldvl => {
-                console.log( "valeur_precedente:", oldvl?.r_valeur, "date_precedente:", oldvl?.r_datevl)
-                await ValeurLiquidative.create(fonds.r_i, {valeur, datevl, description, valeur_precedente: oldvl?.r_valeur, date_precedente: oldvl?.r_datevl}).then(vl => {
+                console.log( "valeur_precedente:", oldvl?.r_valeur_courante, "date_precedente:", oldvl?.r_datevl)
+                await ValeurLiquidative.create(fonds.r_i, {valeur, datevl, description, valeur_precedente: oldvl?.r_valeur_courante, date_precedente: oldvl?.r_datevl}).then(vl => {
                     return response(res, 201, "Valeur liquidative ajouté avec succès", vl);
                 }).catch(err => next(err));
             }).catch(err => next(err));
