@@ -27,7 +27,7 @@ const validerCompteParticulier = async (req, res, next) => {
             await Particulier.updateCompteTitre(particulierId, {ncompte_titre: ncompte}).then(async particulier => {
                 client.r_ncompte_titre = particulier.r_ncompte_titre;
                 client.compte_depot = compte;
-                return response(res, 200, `Validation de compte terminé`, client);
+                return response(res, 200, `Compte client validé avec succès`, client);
             }).catch(err => console.log(err));
         }).catch(err => console.log(err));
     }).catch(err => next(err));
