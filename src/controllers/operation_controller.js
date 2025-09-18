@@ -1,4 +1,5 @@
 const response = require("../middlewares/response");
+const CompteDepot = require("../models/CompteDepot");
 const Fonds = require("../models/Fonds");
 const Operation = require("../models/Operation");
 const Portefeuille = require("../models/Portefeuille");
@@ -57,15 +58,21 @@ const rejectedOperation = async (req, res, next) => {
                 if (!tyop) return response(res, 404, `Type opération introuvabe !`);
                 await Portefeuille.rejected(treated.r_i).then(async portefeuille => {
                     if (!portefeuille) return response(res, 404, `Portefeuille introuvabe !`);
-                    await Fonds.findById(portefeuille.e_fonds).then(async fonds => {
-                        return response(res, 200, `Opération rejeté avec succès`, {
-                            r_intitule_fonds: fonds.r_intitule,
-                            r_type_operation: tyop.r_intitule,
-                            r_cours_placement: portefeuille.r_cours_placement,
-                            r_nombre_parts: portefeuille.r_nombre_parts,
-                            r_valeur_placement: portefeuille.r_valeur_placement,
-                            r_statut: portefeuille.r_statut
-                        });
+                    await CompteDepot.findByActeurId(treated.e_acteur).then(async compte => {
+                        if (!portefeuille) return response(res, 404, `Compte de dépôt introuvabe !`);
+                        const solde = Number(compte.r_solde_disponible) + Number(portefeuille.r_valeur_placement);
+                        await CompteDepot.mouvement(treated.e_acteur, {montant:solde}).then(async () => {
+                            await Fonds.findById(portefeuille.e_fonds).then(async fonds => {
+                                return response(res, 200, `Opération rejeté avec succès`, {
+                                    r_intitule_fonds: fonds.r_intitule,
+                                    r_type_operation: tyop.r_intitule,
+                                    r_cours_placement: portefeuille.r_cours_placement,
+                                    r_nombre_parts: portefeuille.r_nombre_parts,
+                                    r_valeur_placement: portefeuille.r_valeur_placement,
+                                    r_statut: portefeuille.r_statut
+                                });
+                            }).catch(err => next(err));
+                        }).catch(err => next(err));
                     }).catch(err => next(err));
                 }).catch(err => next(err));
             }).catch(err => next(err));
