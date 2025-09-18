@@ -17,6 +17,11 @@ const Portefeuille = {
     async valid(id) {
         const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE e_operation=$2 RETURNING *`, [1, id]);
         return (await res).rows[0];
+    },
+
+    async rejected(id) {
+        const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE e_operation=$2 RETURNING *`, [2, id]);
+        return (await res).rows[0];
     }
 }
 

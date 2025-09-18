@@ -9,6 +9,7 @@ router.get('/particuliers', app_auth, clientController.findAllParticulier);
 router.patch('/particuliers/:particulierId/valider', app_auth, clientController.validerCompteParticulier);
 
 router.get('/operations/attentes', app_auth, operationController.getAllUnTreatedOp);
-router.patch('/operations/:ref/valider', app_auth, operationController.validerOperation);
+router.patch('/operations/:ref/valider', app_auth, operationController.validOperation);
+router.patch('/operations/:ref/rejeter', app_auth, operationController.rejectedOperation);
 
 module.exports = router;
