@@ -12,26 +12,32 @@ const Fonds = {
         return (await res).rows;
     },
 
-    async create(code, {intitule, description, commission_souscription, commission_sortie}) {
+    async create(code, {intitule, type, valeur_action, taux_allocation, description, commission_souscription, commission_sortie}) {
         const create_date = new Date();
         const res = db.query(`INSERT INTO ${this.tableName}(
                 r_code,
                 r_intitule,
+                r_type,
+                r_valeur_action,
+                r_taux_allocation,
                 r_description,
                 r_date_creer,
                 r_date_modif,
                 r_statut,
                 r_commission_souscription,
                 r_commission_sortie)
-            VALUES($1, $2, $3, $4, $5, $6, $7, $8) 
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
             RETURNING 
                 r_i,
                 r_code, 
                 r_intitule, 
+                r_type,
+                r_valeur_action,
+                r_taux_allocation,
                 r_description,
                 r_commission_souscription,
                 r_commission_sortie`, 
-            [code, intitule, description, create_date, create_date, 1, commission_souscription, commission_sortie]);
+            [code, intitule, type, valeur_action, taux_allocation, description, create_date, create_date, 1, commission_souscription, commission_sortie]);
 
         return (await res).rows[0];
     },
@@ -40,7 +46,10 @@ const Fonds = {
         const res = db.query(`
             SELECT 
                 r_code, 
-                r_intitule, 
+                r_intitule,
+                r_type,
+                r_valeur_action,
+                r_taux_allocation, 
                 r_description, 
                 r_commission_souscription, 
                 r_commission_sortie
@@ -54,6 +63,9 @@ const Fonds = {
             SELECT r_i,
                 r_code, 
                 r_intitule, 
+                r_type,
+                r_valeur_action,
+                r_taux_allocation,
                 r_description, 
                 r_commission_souscription, 
                 r_commission_sortie
@@ -67,6 +79,9 @@ const Fonds = {
             SELECT r_i,
                 r_code, 
                 r_intitule, 
+                r_type,
+                r_valeur_action,
+                r_taux_allocation,
                 r_description, 
                 r_commission_souscription, 
                 r_commission_sortie

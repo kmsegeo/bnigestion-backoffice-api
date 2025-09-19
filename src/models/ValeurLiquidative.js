@@ -22,7 +22,7 @@ const ValeurLiquidative = {
     //     return (await res).rows;
     // },
 
-    async create(fonds, {valeur, datevl, description, valeur_precedente, date_precedente}) {
+    async create(fonds, {valeur, datevl, description, valeur_precedente, date_precedente, taux_redement, rendement_positive}) {
         const now = new Date();
         const res = db.query(`
             INSERT INTO ${this.tableName} (
@@ -31,17 +31,21 @@ const ValeurLiquidative = {
                 r_description,
                 r_valeur_precedente,
                 r_date_precedente,
+                r_taux_redement,
+                r_rendement_positive,
                 r_date_creer,
                 r_date_modif,
                 r_statut,
                 e_fonds) 
-            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) 
+            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) 
             RETURNING *`, [
                 valeur,
                 datevl,
                 description,
                 valeur_precedente, 
                 date_precedente,
+                taux_redement, 
+                rendement_positive,
                 now,
                 now,
                 1,
@@ -65,7 +69,7 @@ const ValeurLiquidative = {
         return (await res).rows;
     },
     
-    async update(id, fonds, {valeur, datevl, description, valeur_precedente, date_precedente}) {
+    async update(id, fonds, {valeur, datevl, description, valeur_precedente, date_precedente, taux_redement, rendement_positive}) {
         const res = db.query(`
             UPDATE ${this.tableName} 
             SET r_valeur_courante=$1,
@@ -73,14 +77,18 @@ const ValeurLiquidative = {
                 r_description=$3,
                 r_valeur_precedente=$4
                 r_date_precedente=$5,
-                r_date_modif=$6,
-                e_fonds=$7,
+                r_taux_redement=$5,
+                r_rendement_positive=$6,
+                r_date_modif=$7,
+                e_fonds=$8,
             WHERE r_i=$11 RETURNING *`, [
                 valeur,
                 datevl,
                 description,
                 valeur_precedente, 
                 date_precedente,
+                taux_redement,
+                rendement_positive,
                 new Date(),
                 fonds,
                 id]);

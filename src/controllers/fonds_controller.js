@@ -29,10 +29,10 @@ const getOneFonds = async (req, res, next) => {
 
 const createFonds = async (req, res, next) => {
     console.log("Création d'un nouveau fonds...");
-    const {intitule, description, commission_souscription, commission_sortie} = req.body;
+    const {intitule, type, valeur_action, taux_allocation, description, commission_souscription, commission_sortie} = req.body;
     Utils.expectedParameters({intitule}).then(async () => { 
         await Utils.generateCode(Fonds.codePrefix, Fonds.tableName, Fonds.codeColumn).then(async code => {
-            await Fonds.create(code, {intitule, description, commission_souscription, commission_sortie}).then(fonds => {
+            await Fonds.create(code, {intitule, type, valeur_action, taux_allocation, description, commission_souscription, commission_sortie}).then(fonds => {
                 return response(res, 201, "Fonds créé avec succès", fonds)
             }).catch(err => next(err));
         }).catch(err => next(err));
@@ -48,7 +48,18 @@ const createVl = async (req, res, next) => {
             if (!fonds) return response(res, 404, "Fonds non trouvé");
             await ValeurLiquidative.findLastByFonds(fonds.r_i).then(async oldvl => {
                 console.log( "valeur_precedente:", oldvl?.r_valeur_courante, "date_precedente:", oldvl?.r_datevl)
-                await ValeurLiquidative.create(fonds.r_i, {valeur, datevl, description, valeur_precedente: oldvl?.r_valeur_courante, date_precedente: oldvl?.r_datevl}).then(vl => {
+                const valeur_precedente = oldvl.r_valeur_courante ? Number(oldvl.r_valeur_courante) : 0;
+                const taux_redement = ((Number(valeur)-valeur_precedente)/valeur_precedente) * 100
+                const rendement_positive= (Number(valeur)-valeur_precedente) < 0 ? false: true;
+                await ValeurLiquidative.create(fonds.r_i, {
+                    valeur, 
+                    datevl, 
+                    description, 
+                    valeur_precedente, 
+                    date_precedente: oldvl?.r_datevl, 
+                    taux_redement, 
+                    rendement_positive
+                }).then(vl => {
                     return response(res, 201, "Valeur liquidative ajouté avec succès", vl);
                 }).catch(err => next(err));
             }).catch(err => next(err));
