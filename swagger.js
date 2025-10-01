@@ -6,8 +6,8 @@ const doc = {
         version: process.env.VERSION,
         description: `Application backoffice de gestion de fonds commun de placement`,
     },
-    // host: '172.10.10.57/api/bamclient',
-    host: 'localhost:3003',
+    host: '192.168.20.38/bnigestion_api_bk',
+    // host: 'localhost:3003',
     schemes: ['http']
 };
 
