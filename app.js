@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 const base_path = '/v1'
 
-app.use(base_path + '/auth', authRoutes);
+// app.use(base_path + '/auth', authRoutes);
 app.use(base_path + '/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(base_path + '/fonds', fondsRoutes);
