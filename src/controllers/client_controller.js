@@ -5,10 +5,10 @@ const CompteDepot = require("../models/CompteDepot");
 
 const findAllParticulier = async (req, res, next) => {
 
-    const pagesize = req.query.page_size ? parseInt(req.query.page_size) : 10;
-    const pagenumber = req.query.page_number ? parseInt(req.query.page_number) : 1;
+    const pagesize = req.query.pagesize ? parseInt(req.query.pagesize) : 10;
+    const pagenumber = req.query.pagenumber ? parseInt(req.query.pagenumber) : 1;
     
-    console.log(`Récupération des clients particuliers.. Page: ${page_number} | Taille: ${page_size}`);
+    console.log(`Récupération des clients particuliers.. Page: ${pagenumber} | Taille: ${pagesize}`);
 
     await Particulier.findAll().then(async clients => {
         for(let client of clients) {
