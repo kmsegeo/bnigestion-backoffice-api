@@ -138,12 +138,12 @@
         "description": "",
         "parameters": [
           {
-            "name": "page_size",
+            "name": "pagesize",
             "in": "query",
             "type": "string"
           },
           {
-            "name": "page_number",
+            "name": "pagenumber",
             "in": "query",
             "type": "string"
           }
