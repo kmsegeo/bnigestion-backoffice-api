@@ -4,12 +4,12 @@ const app_auth = require('../middlewares/app_auth');
 const session_verify = require('../middlewares/session_verify');
 const fondsController = require('../controllers/fonds_controller');
 
-router.get('/', app_auth, fondsController.getAllFonds);
+router.get('/', fondsController.getAllFonds);
 
-router.post('/', app_auth, fondsController.createFonds);
-router.get('/:code', app_auth, fondsController.getOneFonds);
+router.post('/', fondsController.createFonds);
+router.get('/:code', fondsController.getOneFonds);
 
-router.post('/:code/vl', app_auth, fondsController.createVl);
-router.get('/:code/vls', app_auth, fondsController.getAllVlsByFonds);
+router.post('/:code/vl', fondsController.createVl);
+router.get('/:code/vls', fondsController.getAllVlsByFonds);
 
 module.exports = router;

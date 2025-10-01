@@ -5,11 +5,11 @@ const session_verify = require('../middlewares/session_verify');
 const clientController = require('../controllers/client_controller')
 const operationController = require('../controllers/operation_controller')
 
-router.get('/particuliers', app_auth, clientController.findAllParticulier);
-router.patch('/particuliers/:particulierId/valider', app_auth, clientController.validerCompteParticulier);
+router.get('/particuliers', clientController.findAllParticulier);
+router.patch('/particuliers/:particulierId/valider', clientController.validerCompteParticulier);
 
-router.get('/operations/attentes', app_auth, operationController.getAllUnTreatedOp);
-router.patch('/operations/:ref/valider', app_auth, operationController.validOperation);
-router.patch('/operations/:ref/rejeter', app_auth, operationController.rejectedOperation);
+router.get('/operations/attentes', operationController.getAllUnTreatedOp);
+router.patch('/operations/:ref/valider', operationController.validOperation);
+router.patch('/operations/:ref/rejeter', operationController.rejectedOperation);
 
 module.exports = router;
