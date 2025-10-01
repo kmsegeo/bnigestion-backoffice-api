@@ -16,7 +16,13 @@ const findAllParticulier = async (req, res, next) => {
                 client.compte_depot = compte;
             })
         }
-        return response(res, 200, `Lists des clients particulier`, clients);
+        
+        return response(res, 200, `Lists des clients particulier`, {
+            total: clients.length, 
+            pages: clients.length % pagesize === 0 ? Math.floor(clients.length / pagesize) : Math.floor(clients.length / pagesize) + 1, 
+            clients: clients.slice((pagenumber - 1) * pagesize, pagenumber * pagesize)
+        });
+
     }).catch(err => next(err));
 }
 
