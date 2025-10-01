@@ -2,6 +2,10 @@ const { format } = require("winston");
 const response = require("../middlewares/response");
 const { Particulier } = require("../models/Client");
 const CompteDepot = require("../models/CompteDepot");
+const default_data = require("../config/default_data");
+const Acteur = require("../models/Acteur");
+
+const statuts = default_data.default_status;
 
 const findAllParticulier = async (req, res, next) => {
 
@@ -15,6 +19,8 @@ const findAllParticulier = async (req, res, next) => {
             await CompteDepot.findByActeurId(client.acteur_id).then(async compte => {
                 client.compte_depot = compte;
             })
+            client.r_statut = statuts[client.r_statut];
+            delete client.e_type_acteur;
         }
         
         return response(res, 200, `Lists des clients particulier`, {
@@ -45,7 +51,33 @@ const validerCompteParticulier = async (req, res, next) => {
     }).catch(err => next(err));
 }
 
+const updateParticulier = async (req, res, next) => {
+    console.log("Mise à jour d'un client particulier...");
+    const particulierId = req.params.particulierId;
+    const {civilite, nom, prenom, email, telephone} = req.body;
+    console.log(`Récupération des données client`);
+    await Particulier.findById(particulierId).then(async client => {
+        if(!client) return response(res, 404, `Client introuvable !`);
+        const nom_complet = nom + ' ' + prenom;
+        console.log(`Mise à jour des données acteur`);
+        await Acteur.update(client.acteur_id, {civilite, nom_complet, email, telephone}).then(async acteur => {
+            console.log(`Mise à jour des données particulier`);
+            await Particulier.update(particulierId, {civilite, nom, prenom}).then(async particulier => {
+                client.r_civilite = particulier.r_civilite;
+                client.r_nom = particulier.r_nom;
+                client.r_prenom = particulier.r_prenom;
+                client.r_email = acteur.r_email;
+                client.r_telephone_prp = acteur.r_telephone_prp;
+                client.r_statut = statuts[client.r_statut];
+                delete client.e_type_acteur;
+                return response(res, 200, `Mise à jour effectuée avec succès`, client);
+            }).catch(err => console.log(err));
+        }).catch(err => console.log(err));
+    }).catch(err => next(err));
+}
+
 module.exports = {
     findAllParticulier,
-    validerCompteParticulier
+    validerCompteParticulier,
+    updateParticulier
 }

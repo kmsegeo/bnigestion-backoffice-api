@@ -6,5 +6,6 @@ const clientController = require('../controllers/client_controller')
 
 router.get('/particuliers', clientController.findAllParticulier);
 router.patch('/particuliers/:particulierId/valider', clientController.validerCompteParticulier);
+router.put('/particuliers/:particulierId', clientController.updateParticulier);
 
 module.exports = router;

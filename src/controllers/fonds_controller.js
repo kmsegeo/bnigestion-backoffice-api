@@ -1,15 +1,23 @@
+const default_data = require("../config/default_data");
 const response = require("../middlewares/response");
 const Fonds = require("../models/Fonds");
 const ValeurLiquidative = require("../models/ValeurLiquidative");
 const Utils = require("../utils/utils.methods");
+
+const statuts = default_data.default_status;
 
 const getAllFonds = async (req, res, next) => {
     console.log("Récupération de la liste des fonds...");
     await Fonds.findAll().then(async fonds => {
         for (let f of fonds) {
             await ValeurLiquidative.findLastByFonds(f.r_i).then(vl => {
+                vl.r_statut = statuts[vl.r_statut];
+                delete vl.r_i;
+                delete vl.e_fonds;
                 f['vl'] = vl;
             }).catch(err=>next(err));
+            f.r_statut = statuts[f.r_statut];
+            delete f.r_i;
         }
         return response(res, 200, "Liste des fonds", fonds);
     }).catch(err => next(err));
@@ -19,9 +27,13 @@ const getOneFonds = async (req, res, next) => {
     const code = req.params.code;
     console.log("Récupération du fonds " + code + "...");
     await Fonds.findByCode(code).then(async fonds => {
-        if (!fonds) return response(res, 404, "Fonds non trouvé", null)
+        if (!fonds) return response(res, 404, "Fonds non trouvé", null);
         await ValeurLiquidative.findLastByFonds(fonds.r_i).then(vl => {
             fonds.vl = vl
+            vl.r_statut = statuts[vl.r_statut];
+            delete vl.r_i;
+            delete vl.e_fonds;
+            delete fonds.r_i;
             return response(res, 200, "Détails du fonds", fonds);
         }).catch(err => next(err));
     }).catch(err => next(err));
@@ -91,6 +103,12 @@ const getAllVlsByFonds = async (req, res, next) => {
             const total = vls.length;
             const pages = vls.length % pagesize === 0 ? Math.floor(vls.length / pagesize) : Math.floor(vls.length / pagesize) + 1;
             vls = vls.slice((pagenumber - 1) * pagesize, pagenumber * pagesize);
+            for (let vl of vls) {
+                vl.r_statut = statuts[vl.r_statut];
+                delete vl.r_i;
+                delete vl.e_fonds;
+            }
+            delete fonds.r_i;
             return response(res, 200, "Détails du fonds", {fonds, vls, total, pages});
         }).catch(err => next(err));
     }).catch(err => next(err));

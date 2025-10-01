@@ -91,11 +91,7 @@ const Acteur = {
         r_date_creer, 
         r_date_modif, 
         r_date_activation,
-        e_type_acteur,
-        e_signataire,
-        e_particulier,
-        e_entreprise,
-        e_represantant
+        e_type_acteur
       FROM ${this.tableName} WHERE e_particulier=$1`;
     const res = db.query(queryString, [clientId]);
     return (await res).rows[0];
@@ -115,19 +111,22 @@ const Acteur = {
         r_date_creer, 
         r_date_modif, 
         r_date_activation,
-        e_type_acteur,
-        e_signataire,
-        e_particulier,
-        e_entreprise,
-        e_represantant
+        e_type_acteur
       FROM ${this.tableName} WHERE e_entreprise=$1`;
     const res = db.query(queryString, [clientId]);
     return (await res).rows[0];
   },
   
-  async update(id, {civilite, nom, prenom}) {
-    const queryString = `UPDATE ${this.tableName} SET ... WHERE r_i=$4 RETURNING r_civilite, r_nom, r_prenom, e_profil`;
-    const res = db.query(queryString, [civilite, nom, prenom, id])
+  async update(id, {nom_complet, email, telephone, adresse}) {
+    const queryString = `
+      UPDATE ${this.tableName} 
+      SET r_nom_complet=$1, 
+          r_email=$2, 
+          r_telephone_prp=$3, 
+          r_date_modif=$4, 
+          r_adresse=$5 
+      WHERE r_i=$6 RETURNING r_nom_complet, r_email, r_telephone_prp, r_adresse`;
+    const res = db.query(queryString, [nom_complet, email, telephone, new Date(), adresse, id]);
     return (await res).rows[0];
   },
 

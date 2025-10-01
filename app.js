@@ -26,8 +26,8 @@ const base_path = '/v1'
 app.use(base_path + '/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(base_path + '/acteurs/clients', clientRoutes);
-app.use(base_path + '/operations', operationRoutes);
 app.use(base_path + '/fonds', fondsRoutes);
+app.use(base_path + '/operations', operationRoutes);
 
 // Error handling middlware 
 

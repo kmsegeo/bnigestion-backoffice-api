@@ -77,6 +77,16 @@ const Particulier = {
         return (await res).rows[0];
     },
 
+    async update(particulierId, {civilite, nom, prenom}) {
+        const res = await db.query(`
+            UPDATE ${this.tableName} 
+            SET r_civilite=$1, 
+                r_nom=$2,
+                r_prenom=$3 
+            WHERE r_i=$4 RETURNING *`, [civilite, nom, prenom, particulierId]);
+        return res.rows[0];
+    },
+
     async updateCompteTitre(particulierId, {ncompte_titre}) {
         const res = await db.query(`
             UPDATE ${this.tableName} 
