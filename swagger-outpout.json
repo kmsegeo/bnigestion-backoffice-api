@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "description": "Application backoffice de gestion de fonds commun de placement"
   },
-  "host": "localhost:3003",
+  "host": "192.168.20.38/bnigestion_api_bk",
   "basePath": "/",
   "schemes": [
     "http"
@@ -123,6 +123,16 @@
             "name": "code",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pagenumber",
+            "in": "query",
             "type": "string"
           }
         ],
