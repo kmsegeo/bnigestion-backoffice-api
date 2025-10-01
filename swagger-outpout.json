@@ -11,6 +11,114 @@
     "http"
   ],
   "paths": {
+    "/v1/acteurs/clients/particuliers": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "pagesize",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pagenumber",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/acteurs/clients/particuliers/{particulierId}/valider": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "particulierId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/operations/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "pagesize",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pagenumber",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/operations/attentes": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/operations/{ref}/valider": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/operations/{ref}/rejeter": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/v1/fonds/": {
       "get": {
         "description": "",
@@ -133,114 +241,6 @@
           {
             "name": "pagenumber",
             "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/acteurs/clients/particuliers": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "pagesize",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "pagenumber",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/acteurs/clients/particuliers/{particulierId}/valider": {
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "particulierId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/operations/": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "pagesize",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "pagenumber",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/operations/attentes": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/operations/{ref}/valider": {
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "ref",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/operations/{ref}/rejeter": {
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "ref",
-            "in": "path",
-            "required": true,
             "type": "string"
           }
         ],
