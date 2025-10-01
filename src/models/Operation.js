@@ -5,7 +5,7 @@ const Operation = {
     tableName: '_sc_gestion.t_operation',
 
     async findAll() {
-        const res = db.query(`SELECT * FROM ${this.tableName}`);
+        const res = db.query(`SELECT * FROM ${this.tableName} ORDER BY r_date_creer DESC`);
         return (await res).rows;
     },
 

@@ -1,9 +1,61 @@
 const response = require("../middlewares/response");
+const Acteur = require("../models/Acteur");
 const CompteDepot = require("../models/CompteDepot");
 const Fonds = require("../models/Fonds");
 const Operation = require("../models/Operation");
 const Portefeuille = require("../models/Portefeuille");
+const TypeActeur = require("../models/TypeActeur");
 const TypeOperation = require("../models/TypeOperation");
+
+const statuts = {
+    0: "En attente",
+    1: "Validée",
+    2: "Rejetée"
+}
+
+const getAllOperations = async (req, res, next) => {
+
+    const pagesize = req.query.pagesize ? parseInt(req.query.pagesize) : 10;
+    const pagenumber = req.query.pagenumber ? parseInt(req.query.pagenumber) : 1;
+    
+    console.log(`Récupération des opérations.. Page: ${pagenumber} | Taille: ${pagesize}`);
+
+    await Operation.findAll().then(async operations => {
+        for(let op of operations) { 
+            await TypeOperation.findById(op.e_type_operation).then(async tyop => {
+                if (tyop.r_i==op.e_type_operation) {
+                    op.r_type_operation = tyop.r_intitule;
+                    delete op.e_type_operation;
+                }
+            });
+
+            await Acteur.findById(op.e_acteur).then(async acteur => {
+                if (acteur) {
+                    await TypeActeur.findById(acteur.e_type_acteur).then(async tyac => {
+                        acteur.r_type_acteur = tyac.r_intitule;
+                        op.r_acteur = acteur;
+
+                        delete acteur.e_type_acteur;
+                        delete acteur.r_statut;
+                        delete acteur.r_date_creer;
+                        delete acteur.r_date_modif;
+                        delete acteur.r_date_activation;
+                        delete acteur.r_langue;
+                        delete acteur.r_telephone_scd;
+                    });
+                }
+            });
+
+            delete op.r_i;
+            op.r_statut = statuts[op.r_statut];
+        }
+        return response(res, 200, `Liste des opérations`, {
+            total: operations.length, 
+            pages: operations.length % pagesize === 0 ? Math.floor(operations.length / pagesize) : Math.floor(operations.length / pagesize) + 1, 
+            operations: operations.slice((pagenumber - 1) * pagesize, pagenumber * pagesize)
+        });
+    }).catch(err => next(err));
+}
 
 const getAllUnTreatedOp = async (req, res, next) => {
     console.log(`Récupération des opérations non traité..`);
@@ -81,6 +133,7 @@ const rejectedOperation = async (req, res, next) => {
 }
 
 module.exports = {
+    getAllOperations,
     getAllUnTreatedOp,
     validOperation,
     rejectedOperation

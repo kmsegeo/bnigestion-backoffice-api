@@ -27,6 +27,7 @@ app.use(base_path + '/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocumen
 
 app.use(base_path + '/fonds', fondsRoutes);
 app.use(base_path + '/acteurs/clients', clientRoutes);
+app.use(base_path + '/operations', operationRoutes);
 
 // Error handling middlware 
 

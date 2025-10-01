@@ -83,13 +83,15 @@ const getAllVlsByFonds = async (req, res, next) => {
     
     const pagesize = req.query.pagesize ? parseInt(req.query.pagesize) : 10;
     const pagenumber = req.query.pagenumber ? parseInt(req.query.pagenumber) : 1;
-    console.log(`Récupération du fonds ${code}, Page: ${pagenumber} | Taille: ${pagesize}` );
+    console.log(`Récupération du fonds ${code}.. Page: ${pagenumber} | Taille: ${pagesize}` );
 
     await Fonds.findByCode(code).then(async fonds => {
         if (!fonds) return response(res, 404, "Fonds non trouvé", null)
         await ValeurLiquidative.findAllByFonds(fonds.r_i).then(vls => {
-            fonds.vls = vls
-            return response(res, 200, "Détails du fonds", fonds);
+            const total = vls.length;
+            const pages = vls.length % pagesize === 0 ? Math.floor(vls.length / pagesize) : Math.floor(vls.length / pagesize) + 1;
+            vls = vls.slice((pagenumber - 1) * pagesize, pagenumber * pagesize);
+            return response(res, 200, "Détails du fonds", {fonds, vls, total, pages});
         }).catch(err => next(err));
     }).catch(err => next(err));
 }

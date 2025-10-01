@@ -45,16 +45,12 @@ const Acteur = {
         r_telephone_scd, 
         r_adresse, 
         r_statut,
-        profil_investisseur,
+        r_profil_investisseur,
         r_langue,
         r_date_creer, 
         r_date_modif, 
         r_date_activation,
-        e_type_acteur,
-        e_signataire,
-        e_particulier,
-        e_entreprise,
-        e_represantant
+        e_type_acteur
       FROM ${this.tableName} WHERE r_i = $1`;
       const res = db.query(queryString, [id]);
       return (await res).rows[0];

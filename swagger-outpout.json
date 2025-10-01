@@ -183,7 +183,29 @@
         }
       }
     },
-    "/v1/acteurs/clients/operations/attentes": {
+    "/v1/operations/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "pagesize",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pagenumber",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/operations/attentes": {
       "get": {
         "description": "",
         "responses": {
@@ -193,7 +215,7 @@
         }
       }
     },
-    "/v1/acteurs/clients/operations/{ref}/valider": {
+    "/v1/operations/{ref}/valider": {
       "patch": {
         "description": "",
         "parameters": [
@@ -211,7 +233,7 @@
         }
       }
     },
-    "/v1/acteurs/clients/operations/{ref}/rejeter": {
+    "/v1/operations/{ref}/rejeter": {
       "patch": {
         "description": "",
         "parameters": [
