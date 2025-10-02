@@ -1,3 +1,4 @@
+const default_data = require("../config/default_data");
 const response = require("../middlewares/response");
 const Acteur = require("../models/Acteur");
 const CompteDepot = require("../models/CompteDepot");
@@ -47,7 +48,12 @@ const getAllOperations = async (req, res, next) => {
             });
 
             delete op.r_i;
-            op.r_statut = statuts[op.r_statut];
+            op.r_statut = {
+                'code': op.r_statut,
+                'libelle': default_data.operation_status[op.r_statut],
+                'couleur': default_data.status_couleur[op.r_statut]
+            };
+            // op.r_statut = statuts[op.r_statut];
         }
         return response(res, 200, `Liste des opérations`, {
             total: operations.length, 
