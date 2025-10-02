@@ -5,8 +5,6 @@ const CompteDepot = require("../models/CompteDepot");
 const default_data = require("../config/default_data");
 const Acteur = require("../models/Acteur");
 
-const statuts = default_data.default_status;
-
 const findAllParticulier = async (req, res, next) => {
 
     const pagesize = req.query.pagesize ? parseInt(req.query.pagesize) : 10;
@@ -16,14 +14,20 @@ const findAllParticulier = async (req, res, next) => {
 
     await Particulier.findAll().then(async clients => {
         for(let client of clients) {
+            client.r_solde_disponible = 0;
             await CompteDepot.findByActeurId(client.acteur_id).then(async compte => {
-                client.compte_depot = compte;
+                if (compte) client.r_solde_disponible = compte.r_solde_disponible;
             })
-            client.r_statut = statuts[client.r_statut];
+            client.r_type_piece = default_data.type_piece[client.r_type_piece];
+            client.r_statut = {
+                'code': client.r_statut,
+                'libelle': default_data.default_status[client.r_statut],
+                'couleur': default_data.status_couleur[client.r_statut]
+            };
             delete client.e_type_acteur;
         }
         
-        return response(res, 200, `Lists des clients particulier`, {
+        return response(res, 200, `Liste des clients particulier`, {
             total: clients.length, 
             pages: clients.length % pagesize === 0 ? Math.floor(clients.length / pagesize) : Math.floor(clients.length / pagesize) + 1, 
             clients: clients.slice((pagenumber - 1) * pagesize, pagenumber * pagesize)
@@ -41,10 +45,11 @@ const validerCompteParticulier = async (req, res, next) => {
         console.log(`Creation du compte de dépôt`);
         const min = 100000000; const max = 999999999; 
         const ncompte = Math.floor(Math.random() * (max - min + 1)) + min;
+        client.r_solde_disponible = 0;
         await CompteDepot.create({numero_compte: ncompte ,acteur: client.acteur_id}).then(async compte => {
+            if (compte) client.r_solde_disponible = compte.r_solde_disponible;
             await Particulier.updateCompteTitre(particulierId, {ncompte_titre: ncompte}).then(async particulier => {
                 client.r_ncompte_titre = particulier.r_ncompte_titre;
-                client.compte_depot = compte;
                 return response(res, 200, `Compte client validé avec succès`, client);
             }).catch(err => console.log(err));
         }).catch(err => console.log(err));
@@ -68,7 +73,11 @@ const updateParticulier = async (req, res, next) => {
                 client.r_prenom = particulier.r_prenom;
                 client.r_email = acteur.r_email;
                 client.r_telephone_prp = acteur.r_telephone_prp;
-                client.r_statut = statuts[client.r_statut];
+                client.r_statut = default_data.default_status[client.r_statut];
+                client.r_solde_disponible = 0;
+                // await CompteDepot.findByActeurId(client.acteur_id).then(async compte => {
+                //     if (compte) client.r_solde_disponible = compte.r_solde_disponible;
+                // })
                 delete client.e_type_acteur;
                 return response(res, 200, `Mise à jour effectuée avec succès`, client);
             }).catch(err => console.log(err));
