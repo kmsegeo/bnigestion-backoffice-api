@@ -11,6 +11,26 @@
     "http"
   ],
   "paths": {
+    "/v1/ressources/civilites": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/ressources/type-pieces": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/v1/acteurs/clients/particuliers": {
       "get": {
         "description": "",
