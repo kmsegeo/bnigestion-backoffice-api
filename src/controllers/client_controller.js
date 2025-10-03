@@ -66,32 +66,33 @@ const updateParticulier = async (req, res, next) => {
     const {civilite, nom, prenom, email, telephone} = req.body;
     console.log(`Récupération des données client`);
     
-    console.log(civilite, nom, prenom, email, telephone);
-    await Utils.expectedParameters({civilite, nom, prenom, email, telephone}).catch(err => { return response(res, 400, err); });
+    console.log(req.body);
+    return response(res, 200, `Mise à jour effectuée avec succès`, req.body);
+    // await Utils.expectedParameters({civilite, nom, prenom, email, telephone}).catch(err => { return response(res, 400, err); });
 
-    await Particulier.findById(particulierId).then(async client => {
-        if(!client) return response(res, 404, `Client introuvable !`);
-        const nom_complet = nom + ' ' + prenom;
-        console.log(`Mise à jour des données acteur`);
-        await Acteur.update(client.acteur_id, {civilite, nom_complet, email, telephone}).then(async acteur => {
-            console.log(`Mise à jour des données particulier`);
-            await Particulier.update(particulierId, {civilite, nom, prenom}).then(async particulier => {
-                client.r_civilite = default_data.civilites[particulier.r_civilite];
-                client.r_nom = particulier.r_nom;
-                client.r_prenom = particulier.r_prenom;
-                client.r_email = acteur.r_email;
-                client.r_telephone_prp = acteur.r_telephone_prp;
-                client.r_statut = default_data.default_status[client.r_statut];
-                client.r_type_piece = default_data.type_pieces[client.r_type_piece];
-                client.r_solde_disponible = 0;
-                // await CompteDepot.findByActeurId(client.acteur_id).then(async compte => {
-                //     if (compte) client.r_solde_disponible = compte.r_solde_disponible;
-                // })
-                delete client.e_type_acteur;
-                return response(res, 200, `Mise à jour effectuée avec succès`, client);
-            }).catch(err => console.log(err));
-        }).catch(err => console.log(err));
-    }).catch(err => next(err));
+    // await Particulier.findById(particulierId).then(async client => {
+    //     if(!client) return response(res, 404, `Client introuvable !`);
+    //     const nom_complet = nom + ' ' + prenom;
+    //     console.log(`Mise à jour des données acteur`);
+    //     await Acteur.update(client.acteur_id, {civilite, nom_complet, email, telephone}).then(async acteur => {
+    //         console.log(`Mise à jour des données particulier`);
+    //         await Particulier.update(particulierId, {civilite, nom, prenom}).then(async particulier => {
+    //             client.r_civilite = default_data.civilites[particulier.r_civilite];
+    //             client.r_nom = particulier.r_nom;
+    //             client.r_prenom = particulier.r_prenom;
+    //             client.r_email = acteur.r_email;
+    //             client.r_telephone_prp = acteur.r_telephone_prp;
+    //             client.r_statut = default_data.default_status[client.r_statut];
+    //             client.r_type_piece = default_data.type_pieces[client.r_type_piece];
+    //             client.r_solde_disponible = 0;
+    //             // await CompteDepot.findByActeurId(client.acteur_id).then(async compte => {
+    //             //     if (compte) client.r_solde_disponible = compte.r_solde_disponible;
+    //             // })
+    //             delete client.e_type_acteur;
+    //             return response(res, 200, `Mise à jour effectuée avec succès`, client);
+    //         }).catch(err => console.log(err));
+    //     }).catch(err => console.log(err));
+    // }).catch(err => next(err));
 }
 
 module.exports = {
