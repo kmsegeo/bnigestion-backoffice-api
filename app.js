@@ -11,6 +11,7 @@ const authRoutes = require('./src/routes/auth_routes');
 const clientRoutes = require('./src/routes/client_routes');
 const fondsRoutes = require('./src/routes/fonds_routes');
 const operationRoutes = require('./src/routes/operation_routes');
+const ressourcesRoutes = require('./src/routes/ressources_routes');
 
 const app = express(); 
 
@@ -25,6 +26,7 @@ const base_path = '/v1'
 // app.use(base_path + '/auth', authRoutes);
 app.use(base_path + '/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
+app.use(base_path + '/ressources', ressourcesRoutes);
 app.use(base_path + '/acteurs/clients', clientRoutes);
 app.use(base_path + '/fonds', fondsRoutes);
 app.use(base_path + '/operations', operationRoutes);

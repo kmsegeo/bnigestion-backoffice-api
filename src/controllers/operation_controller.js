@@ -8,12 +8,6 @@ const Portefeuille = require("../models/Portefeuille");
 const TypeActeur = require("../models/TypeActeur");
 const TypeOperation = require("../models/TypeOperation");
 
-const statuts = {
-    0: "En attente",
-    1: "Validée",
-    2: "Rejetée"
-}
-
 const getAllOperations = async (req, res, next) => {
 
     const pagesize = req.query.pagesize ? parseInt(req.query.pagesize) : 10;
@@ -53,7 +47,6 @@ const getAllOperations = async (req, res, next) => {
                 'libelle': default_data.operation_status[op.r_statut],
                 'couleur': default_data.status_couleur[op.r_statut]
             };
-            // op.r_statut = statuts[op.r_statut];
         }
         return response(res, 200, `Liste des opérations`, {
             total: operations.length, 

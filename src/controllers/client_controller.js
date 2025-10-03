@@ -18,7 +18,8 @@ const findAllParticulier = async (req, res, next) => {
             await CompteDepot.findByActeurId(client.acteur_id).then(async compte => {
                 if (compte) client.r_solde_disponible = compte.r_solde_disponible;
             })
-            client.r_type_piece = default_data.type_piece[client.r_type_piece];
+            client.r_civilite = default_data.civilites[client.r_civilite];
+            client.r_type_piece = default_data.type_pieces[client.r_type_piece];
             client.r_statut = {
                 'code': client.r_statut,
                 'libelle': default_data.default_status[client.r_statut],
@@ -49,6 +50,8 @@ const validerCompteParticulier = async (req, res, next) => {
         await CompteDepot.create({numero_compte: ncompte ,acteur: client.acteur_id}).then(async compte => {
             if (compte) client.r_solde_disponible = compte.r_solde_disponible;
             await Particulier.updateCompteTitre(particulierId, {ncompte_titre: ncompte}).then(async particulier => {
+                client.r_civilite = default_data.civilites[client.r_civilite];
+                client.r_type_piece = default_data.type_pieces[client.r_type_piece];
                 client.r_ncompte_titre = particulier.r_ncompte_titre;
                 return response(res, 200, `Compte client validé avec succès`, client);
             }).catch(err => console.log(err));
@@ -68,12 +71,13 @@ const updateParticulier = async (req, res, next) => {
         await Acteur.update(client.acteur_id, {civilite, nom_complet, email, telephone}).then(async acteur => {
             console.log(`Mise à jour des données particulier`);
             await Particulier.update(particulierId, {civilite, nom, prenom}).then(async particulier => {
-                client.r_civilite = particulier.r_civilite;
+                client.r_civilite = default_data.civilites[particulier.r_civilite];
                 client.r_nom = particulier.r_nom;
                 client.r_prenom = particulier.r_prenom;
                 client.r_email = acteur.r_email;
                 client.r_telephone_prp = acteur.r_telephone_prp;
                 client.r_statut = default_data.default_status[client.r_statut];
+                client.r_type_piece = default_data.type_pieces[client.r_type_piece];
                 client.r_solde_disponible = 0;
                 // await CompteDepot.findByActeurId(client.acteur_id).then(async compte => {
                 //     if (compte) client.r_solde_disponible = compte.r_solde_disponible;
