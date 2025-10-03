@@ -63,16 +63,12 @@ const validerCompteParticulier = async (req, res, next) => {
 const updateParticulier = async (req, res, next) => {
     console.log("Mise à jour d'un client particulier...");
     const particulierId = req.params.particulierId;
+
+    console.log(req.body);
+
     const {civilite, nom, prenom, email, telephone} = req.body;
     console.log(`Récupération des données client`);
-    
-    console.log(req.body);
-    console.log("civilite:", civilite);
-    console.log("nom:", nom);
-    console.log("prenom:", prenom);
-    console.log("email:", email);
-    console.log("telephone:", telephone);
-    
+        
     await Utils.expectedParameters({civilite, nom, prenom, email, telephone}).catch(err => { return response(res, 400, err); });
 
     await Particulier.findById(particulierId).then(async client => {
