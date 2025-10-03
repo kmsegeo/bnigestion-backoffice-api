@@ -4,6 +4,7 @@ const { Particulier } = require("../models/Client");
 const CompteDepot = require("../models/CompteDepot");
 const default_data = require("../config/default_data");
 const Acteur = require("../models/Acteur");
+const Utils = require("../utils/utils.methods");
 
 const findAllParticulier = async (req, res, next) => {
 
@@ -64,6 +65,10 @@ const updateParticulier = async (req, res, next) => {
     const particulierId = req.params.particulierId;
     const {civilite, nom, prenom, email, telephone} = req.body;
     console.log(`Récupération des données client`);
+    
+    console.log(civilite, nom, prenom, email, telephone);
+    await Utils.expectedParameters({civilite, nom, prenom, email, telephone}).catch(err => { return response(res, 400, err); });
+
     await Particulier.findById(particulierId).then(async client => {
         if(!client) return response(res, 404, `Client introuvable !`);
         const nom_complet = nom + ' ' + prenom;
