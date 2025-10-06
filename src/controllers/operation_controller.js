@@ -132,14 +132,14 @@ const rejectedOperation = async (req, res, next) => {
     await Operation.findByRef(ref).then(async operation => {
         if (!operation) return response(res, 404, `Opération introuvable !`);
         if (operation.r_statut!=0) return response(res, 409, `Opération traité !`);
-        await Operation.valid(ref).then(async treated => {
+        await Operation.reject(ref).then(async treated => {
             await TypeOperation.findById(treated.e_type_operation).then(async tyop => {
                 if (!tyop) return response(res, 404, `Type opération introuvabe !`);
                 await Portefeuille.rejected(treated.r_i).then(async portefeuille => {
                     if (!portefeuille) return response(res, 404, `Portefeuille introuvabe !`);
                     await CompteDepot.findByActeurId(treated.e_acteur).then(async compte => {
-                        if (!portefeuille) return response(res, 404, `Compte de dépôt introuvabe !`);
-                        const solde = Number(compte.r_solde_disponible) + Number(portefeuille.r_valeur_placement);
+                        if (!compte) return response(res, 404, `Compte de dépôt introuvabe !`);
+                        const solde = Number(compte.r_solde_disponible) + Number(treated.r_montant);
                         await CompteDepot.mouvement(treated.e_acteur, {montant:solde}).then(async () => {
                             await Fonds.findById(portefeuille.e_fonds).then(async fonds => {
                                 return response(res, 200, `Opération rejeté avec succès`, {
@@ -148,7 +148,7 @@ const rejectedOperation = async (req, res, next) => {
                                     r_cours_placement: portefeuille.r_cours_placement,
                                     r_nombre_parts: portefeuille.r_nombre_parts,
                                     r_valeur_placement: portefeuille.r_valeur_placement,
-                                    r_statut: portefeuille.r_statut
+                                    r_statut: default_data.portefeuille_status[portefeuille.r_statut],
                                 });
                             }).catch(err => next(err));
                         }).catch(err => next(err));
