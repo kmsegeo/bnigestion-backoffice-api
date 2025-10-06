@@ -69,6 +69,24 @@ const getAllUnTreatedOp = async (req, res, next) => {
                 op.r_type_operation = tyop.r_intitule;
                 delete op.e_type_operation;
             });
+
+            await Acteur.findById(op.e_acteur).then(async acteur => {
+                if (acteur) {
+                    await TypeActeur.findById(acteur.e_type_acteur).then(async tyac => {
+                        acteur.r_type_acteur = tyac.r_intitule;
+                        op.r_acteur = acteur;
+
+                        delete acteur.e_type_acteur;
+                        delete acteur.r_statut;
+                        delete acteur.r_date_creer;
+                        delete acteur.r_date_modif;
+                        delete acteur.r_date_activation;
+                        delete acteur.r_langue;
+                        delete acteur.r_telephone_scd;
+                    });
+                }
+            });
+
             delete op.r_statut;
         }
         return response(res, 200, `Liste des opérations non traité..`, {
