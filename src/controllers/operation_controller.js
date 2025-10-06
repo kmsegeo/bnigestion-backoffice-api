@@ -57,7 +57,12 @@ const getAllOperations = async (req, res, next) => {
 }
 
 const getAllUnTreatedOp = async (req, res, next) => {
-    console.log(`Récupération des opérations non traité..`);
+
+    const pagesize = req.query.pagesize ? parseInt(req.query.pagesize) : 10;
+    const pagenumber = req.query.pagenumber ? parseInt(req.query.pagenumber) : 1;
+    
+    console.log(`Récupération des opérations non traité.. Page: ${pagenumber} | Taille: ${pagesize}`);
+
     await Operation.findAllUnTreated().then(async operations => {
         for(let op of operations) { 
             await TypeOperation.findById(op.e_type_operation).then(async tyop => {
@@ -66,7 +71,11 @@ const getAllUnTreatedOp = async (req, res, next) => {
             });
             delete op.r_statut;
         }
-        return response(res, 200, `Liste des opérations non traité..`, operations);
+        return response(res, 200, `Liste des opérations non traité..`, {
+            total: operations.length, 
+            pages: operations.length % pagesize === 0 ? Math.floor(operations.length / pagesize) : Math.floor(operations.length / pagesize) + 1, 
+            operations: operations.slice((pagenumber - 1) * pagesize, pagenumber * pagesize)
+        });
     }).catch(err => next(err));
 }
 
