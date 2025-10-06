@@ -87,6 +87,7 @@ const getAllUnTreatedOp = async (req, res, next) => {
                 }
             });
 
+            delete op.r_i;
             delete op.r_statut;
         }
         return response(res, 200, `Liste des opérations non traité..`, {
