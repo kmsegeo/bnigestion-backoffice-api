@@ -1,9 +1,11 @@
+require('dotenv').config();
+
 module.exports = {
     apps: [{
         name: "bnigestion-api-backoffice",
         script: "server.js",
-        // instances: "max",
-        // exec_mode: "cluster",
+        instances: "1",
+        exec_mode: "cluster",
         watch: false,
         max_memory_restart: "512M",
         env: {
